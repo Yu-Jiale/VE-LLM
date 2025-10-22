@@ -1,0 +1,13 @@
+{
+  "dpi": 300,
+  "page_size": "A4",
+  "font_family": "Times New Roman",
+  "code_font": "Fira Code",
+  "font_size_pt": 12,
+  "line_height": 1.5,
+  "alignment": "left",
+  "margins_mm": [20, 20, 20, 20],
+  "background_color": "#FFFFFF",
+  "chromium_scale": 1.0,
+  "prefer_css_page_size": true
+}

@@ -1,0 +1,8 @@
+{
+  "pages": [
+    "./render_out/page_0001.png",
+    "./render_out/page_0002.png"
+  ],
+  "cfg_fingerprint": "sha256:aefa0df5d53947818a3f148a7f5a686dcbfde9b738ba86b179564b2070a441fc",
+  "ocr_text": "# 示例文档\n\n这是Markdown渲染→OCR的PoC。- 行距：1.55 - 对齐：左对齐\n\ndef hello():\n    print(\"Hello, OCR!\")"
+}
