@@ -7,8 +7,7 @@ import torch
 
 from .config import RenderSettings, apply_overrides, load_render_settings
 from .pipeline_utils import build_inputs_with_image_seq, make_zero_image_stubs
-from .render import render_markdown, md_to_html
-from .html_template import HTML_TMPL
+from .render import compose_html_doc, render_markdown
 from deepseek_ocr_runner import encode_page_to_sequence
 from deepseek_ocr_runner.decoder import decode_generate
 from deepseek_ocr_runner.third_party.deepseek_ocr_mod.modeling_deepseekocr import (
@@ -153,23 +152,7 @@ def evaluate_translator_fidelity(
         raise RuntimeError("渲染失败：未生成任何页面 PNG。")
 
     html_path = os.path.join(cfg.out_dir, "translator_fidelity.html")
-    html_body = md_to_html(md_text)
-    html_full = HTML_TMPL.render(
-        html=html_body,
-        page_w=cfg.page_size_px[0],
-        page_h=cfg.page_size_px[1],
-        m_top=cfg.margins_px[0],
-        m_right=cfg.margins_px[1],
-        m_bottom=cfg.margins_px[2],
-        m_left=cfg.margins_px[3],
-        font_family=cfg.font_family,
-        code_font=cfg.code_font,
-        font_size=cfg.font_size_px,
-        line_height=cfg.line_height,
-        align=cfg.alignment,
-        hyphens=cfg.hyphens,
-        bg=cfg.background_color,
-    )
+    html_full = compose_html_doc(md_text, cfg)
     with open(html_path, "w", encoding="utf-8") as f_html:
         f_html.write(html_full)
 

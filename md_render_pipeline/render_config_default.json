@@ -1,13 +1,16 @@
 {
-  "dpi": 300,
+  "dpi": 600,
   "page_size": "A4",
   "font_family": "Times New Roman",
   "code_font": "Fira Code",
-  "font_size_pt": 12,
+  "font_size_pt": 2,
   "line_height": 1.5,
   "alignment": "left",
-  "margins_mm": [20, 20, 20, 20],
+  "margins_mm": [2, 2, 2, 2],
   "background_color": "#FFFFFF",
   "chromium_scale": 1.0,
-  "prefer_css_page_size": true
+  "prefer_css_page_size": true,
+  "pdf_single_file": true,
+  "math_renderer": "unicode",
+  "katex_assets_dir": null
 }

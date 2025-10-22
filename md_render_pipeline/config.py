@@ -9,6 +9,7 @@ PAGE_SIZE_MM: Dict[str, Tuple[int, int]] = {
     "LEGAL": (216, 356),
 }
 
+DEFAULT_DPI = 192
 DEFAULT_PAGE_SIZE_PX = (1728, 2432)
 DEFAULT_MARGINS_PX = (96, 96, 96, 96)
 DEFAULT_FONT_SIZE_PX = 28
@@ -31,7 +32,8 @@ def _resolve_page_size_px(data: Dict[str, Any], dpi: int) -> Tuple[int, int]:
             raise ValueError(f"Unsupported page_size '{data['page_size']}'. Supported: {', '.join(PAGE_SIZE_MM)}")
         width_mm, height_mm = PAGE_SIZE_MM[key]
         return _mm_to_px(width_mm, dpi), _mm_to_px(height_mm, dpi)
-    return DEFAULT_PAGE_SIZE_PX
+    scale = dpi / DEFAULT_DPI
+    return int(DEFAULT_PAGE_SIZE_PX[0] * scale), int(DEFAULT_PAGE_SIZE_PX[1] * scale)
 
 
 def _resolve_margins_px(data: Dict[str, Any], dpi: int) -> Tuple[int, int, int, int]:
@@ -58,7 +60,13 @@ def _resolve_margins_px(data: Dict[str, Any], dpi: int) -> Tuple[int, int, int, 
         if isinstance(margins, (list, tuple)) and len(margins) == 4:
             top, right, bottom, left = margins
             return int(top), int(right), int(bottom), int(left)
-    return DEFAULT_MARGINS_PX
+    scale = dpi / DEFAULT_DPI
+    return (
+        int(DEFAULT_MARGINS_PX[0] * scale),
+        int(DEFAULT_MARGINS_PX[1] * scale),
+        int(DEFAULT_MARGINS_PX[2] * scale),
+        int(DEFAULT_MARGINS_PX[3] * scale),
+    )
 
 
 def _resolve_font_size_px(data: Dict[str, Any], dpi: int) -> int:
@@ -91,6 +99,9 @@ class RenderSettings:
     chromium_scale: float = 1.0
     a4_mm: Tuple[int, int] = (210, 297)  # For completeness; Playwright uses built-ins
     prefer_css_page_size: bool = True
+    pdf_single_file: bool = False
+    math_renderer: str = "unicode"  # "unicode" | "katex"
+    katex_assets_dir: Optional[str] = None
 
     # Output
     out_dir: str = "./render_out"
@@ -117,6 +128,9 @@ class RenderSettings:
             ligatures=data.get("ligatures", cls.ligatures),
             chromium_scale=float(data.get("chromium_scale", cls.chromium_scale)),
             prefer_css_page_size=bool(data.get("prefer_css_page_size", cls.prefer_css_page_size)),
+            pdf_single_file=bool(data.get("pdf_single_file", cls.pdf_single_file)),
+            math_renderer=str(data.get("math_renderer", cls.math_renderer)).lower(),
+            katex_assets_dir=data.get("katex_assets_dir"),
             out_dir=data.get("out_dir", cls.out_dir),
             doc_id=data.get("doc_id"),
         )
